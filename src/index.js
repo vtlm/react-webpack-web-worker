@@ -1,11 +1,24 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React from 'react'
+import ReactDOM from 'react-dom'
 
-const title = 'My Minimal React Webpack Babel Setup';
+import Worker from 'worker-loader!./sample.worker'
 
-ReactDOM.render(
-  <div>{title}</div>,
-  document.getElementById('app')
-);
+const title = 'My Minimal React Webpack Babel Setup 2'
 
-module.hot.accept();
+import worker_script from './worker'
+var myWorker = new Worker(worker_script)
+
+myWorker.onmessage = m => {
+  console.log('msg from worker: ', m.data)
+}
+myWorker.postMessage('im from main')
+
+let w = new Worker()
+w.postMessage('ping')
+w.onmessage = event => {
+  console.log(event.data)
+}
+
+ReactDOM.render(<div>{title}</div>, document.getElementById('app'))
+
+// module.hot.accept()
